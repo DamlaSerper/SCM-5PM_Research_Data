@@ -1,6 +1,8 @@
 # ResearchData
-Here you can find the research data of the linked journal article.
+In this research a newly developed SCM method is compared to 2D shell mesh for representing repeating porous boundaries.
+The main incentive for developing this method was to reduce the computation time of such boundaries.
 The mentioned novel SCM implementation can be found at: https://github.com/DamlaSerper/SCM.
+Link to the journal article:
 
 **Contributing Authors:**
 - MSc. Damla Serper (Aalto Univeristy, Finland) '*corresponding author*'
