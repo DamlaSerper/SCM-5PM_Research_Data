@@ -1,74 +1,70 @@
 # ResearchData
-Research data of the linked journal article, is composed of input and output files of the LIGGGHTS-PFM simulations (Project folders) and an Excel data sheet (Results_Excel) which includes calculated data. 
-
-The contents are the simulation data and results of cake formation in centrifugal filtration using conventional (mesh) method and novel Switchable contact model (SCM, primitive) method. (For more information see the linked article and the source code of SCM:)
+Here you can find the research data of the linked journal article.
+The mentioned novel SCM implementation can be found at: https://github.com/DamlaSerper/SCM.
 
 ## Contributing Authors
 - MSc. Damla Serper (Aalto Univeristy, Finland) '*corresponding author*'
 - Dr. Kevin Hanley (University of Edinburgh, UK)
 
 ## Folder and file structure
-There are two main folders with names "Centrifugation" and "Calibration".
-
-"Centrifugation" folder contains the input and output files and the results of comparing computational mesh and SCM methods.
-
-"Calibration" folder contains the input and output files and the results of calibration of the transition fraction value.
-
-"Centrifugation" folder contains three sub-folders named "Normal_LIGGGHTS_PFM_Mesh_smult_30X", "SCM_1PM_LIGGGHTS_PFM_Primitive_transfrac_0_00233_smult_30X" and "SCM_5PM_LIGGGHTS_PFM_Primitive_transfrac_0_00233_smult_30X".
-
-Each of these 3 sub-folders include the below list of files:
-
-### Input files
-#### In. file (Script of LIGGGHTS commands)
-- in.cent_walltype_walls_sizemultiplierX_transitionfraction (walltype: mesh/primitive; size_multiplier: 30; transitionfraction: calibrated value 0.00233)
-
-#### Mesh files (For representing geometries)
+### Centrifugation 
+#### Mesh
+##### INPUT
+Simulations are run on supercomputer Puhti of CSC, Finland, using 40 cores on a single node and is allocated 3 GB of memory. These simulations are run on small partition since all were completed under 3 days.
+- b.mesh: Bash script for running batch job on supercomputer.
+- lmp.puhti: Executable file of LIGGGHTS-PFM that is compiled on the supercomputer Puhti.
+- dump.atom_info_1: Information regarding the initial location of the particles with various radii.
+- in.cent_mesh_walls: The script used for giving LIGGGHTS-PFM commands to execute
+mesh files: check https://github.com/DamlaSerper/Parameterized_Centrifugal_Filter for how these are generated.
 - bottom_disk.stl 
 - bot_cyl.stl
 - cone.stl
-- dem_walls_sizemultiplierX_14micronpore_mod_mesh.stl (sizemultiplier: 30)(Only exists in mesh case)
+- in_cap.stl
 - in_cyl.stl
 - top_cyl.stl
 - top_disk.stl
-- in_cap.stl
+- trial_2.stl: representing the filter mesh walls in a 2D thin shell manner
+##### OUTPUT
+- dump.atom_info_ac_2:12309720: Particle locations at each 32 394 timesteps from 2 to 12 309 720 timesteps.
+- log.liggghts: Log file of the simulation, created by LIGGGHTS-PFM.
+- slurm_21912798: Slurm file of the submitted batch job with the ID 21912798, generated on supercomputer Puhti.
+- filter_mesh_scaled1.stl: The computatinal mesh representing the physical mesh wall is scaled within the LIGGGHTS-PFM script, this file shows the scaled version of this mesh in .stl format at timestep 1.
+- numatoms.zip: This contains numatoms.txt file, which writes out the number of particles within the system every step.
+#### SCM
+##### INPUT
+Consists of the equivalent files to Mesh, excluding the trial_2.stl.
+##### OUTPUT
+Consists of the equivalent files to Mesh, excluding the filter_mesh_scaled1.stl.
+#### Prep_and_Results
+- CalcPrimitive.mlx: This MATLAB script helps calculating the function parameters of SCM from the physical dimensions of the centrifuge, see https://github.com/DamlaSerper/Parameterized_Centrifugal_Filter to understand more about the centrifuge dimensions.
+- Prep_and_Results_Centrifugation.xlsx: This file shows the results of Mesh and SCM comparison in terms of computation duration and particle retention.  
+##### Images_and_Videos
+These images and videos are created using Ovito, ffmpeg and ImageMagick.
+- Left/Top.mp4: Shows the animations of Mesh and SCM cases side by side, from left and top point of view respectively.
+- Mesh/SCM_Left/Top.mp4: Shows the animation of Mesh or SCM case from left or top point of view.
+- Mesh/SCM_Left/Top_1/190/381.png: Image files of Mesh or SCM case from left or top point of view at 1st, 190th or 381th frame. Frame 1 corresponds to timestep 2, while 190 corresponds to 6 122 466 and 381 corresponds to 12 309 720.
+- Left/Top_2/3.png: 2 by 2 and 3 by 3 stacked image comparison of Mesh and SCM cases from left or top point of view. For 2 by 2 frames 2 and 381 are used, while for 3 by 3 frames 2, 190 and 381 are used.
 
-For more information on how mesh/geometry files are generated:
-
-https://github.com/DamlaSerper/Parameterized_Centrifugal_Filter
-
-#### Dump file (Initial no_overlap packing of particles)
-- dump.atom_info_1
-
-#### LIGGGHTS executable file (Compiled on the supercomputer)
-- lmp_puhti
-
-#### Batch file (For batch job submission to supercomputer)
-- b.walltype_sizemultiplierX_transitionfraction (walltype: mesh, prim; size_multiplier: 30; transitionfraction: none (mesh case), 0.0023)
-
-### Output files
-#### LIGGGHTS forced restart file (Generated by LIGGGHTS due to killing the job earlier than its completion)
-- restart_forced_ligghts_simulationtimestep.data (simulationtimestep)
-        
-#### LIGGGHTS log file (Generated by LIGGGHTS)
-- log.liggghts
-        
-#### Slurm file (Generated by supercomputer for each batch job sent)
-- slurm_jobID.out (jobID)
-
-#### Text file reporting number of atoms each step (Generated by LIGGGHTS as defined in the in.file)
-- numatoms.txt
-        
-#### Dump files (Atom positions, velocities and properties, generated by LIGGGHTS as defined in the .in file)
-- dump.atom_info_ac_simulationtimestep (simulationtimestep)
-
-### Results 
-Results are collected in Excel to be compared. Here you can also find .mp4 video files that are comparing the three methods.
-
-#### Results_Excel
-Here you can find information about how long the simulations took and how much particles are left at the final step (timestep correscponding to 0.4 second). You can also see the derived quantities such as time reduction and particle loss %.
-
-##### Case properties
-Here you can find information about the case set-up (such as: mesh size, number of steps it will take to reach one second, number of horizontal and vertical pores, number of particles added, number of mesh elements, etc.). You can also see the comparison of different size multipliers in terms of number of elements vs computation time.
-
-### Mesh quality
-Here you can find the metrics that are related to mesh quality.
+### Calibration
+#### Mesh
+##### INPUT
+Simulations are run using mpirun -np 1 lmp_fedora < in.file on the local computer using a single processor.
+- lmp.fedora: Executable file of LIGGGHTS-PFM that is compiled on the local computer with Linux operating system.
+- dump.atom_info_1: Information regarding the initial location of the particles with various radii.
+- in.cal_mesh_walls_30X: The script used for giving LIGGGHTS-PFM commands to execute.
+- cal_mesh.stl: check Calibration/Prep_and_Results/gmsh_cal.mesh.geo to see how the flat rectangular mesh is generated.
+##### OUTPUT
+- dump.atom_info_ac_5000:120000: Particle locations at each 5 000 timesteps from 5 000 to 120 000 timesteps.
+- log.liggghts: Log file of the simulation, created by LIGGGHTS-PFM.
+- meshwallscaled1200001.stl: This file shows mesh in.stl format at timestep 120 001.
+- numatoms.txt: Contains the number of particles within the system, written out on every step.
+#### Run1:24
+There were 24 calibration experiments, the details of each case can be checked from Calibration/Prep_and_Results/Prep_and_Results_Calibration.mlx.
+##### INPUT
+Consists of the equivalent files to Mesh, excluding the cal_mesh.stl.
+##### OUTPUT
+Consists of the equivalent files to Mesh, excluding the meshwallscaled1200001.stl.
+#### Prep_and_Results
+- PACCCK_Calibration.mlx: This MATLAB script creates an initial particle packing for the calibration runs.
+- gmsh_cal_mesh.geo: This GMSH script creates a flat rectangular filter mesh with square pores.
+- Prep_and_Results_Calibration.mlx: This Excel file contains the prelliminary calculations and results of the calibration study.
