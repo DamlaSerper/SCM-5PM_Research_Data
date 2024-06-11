@@ -2,9 +2,11 @@
 Here you can find the research data of the linked journal article.
 The mentioned novel SCM implementation can be found at: https://github.com/DamlaSerper/SCM.
 
-## Contributing Authors
+**Contributing Authors:**
 - MSc. Damla Serper (Aalto Univeristy, Finland) '*corresponding author*'
 - Dr. Kevin Hanley (University of Edinburgh, UK)
+  
+Below you can find the file structure of the folders within this repository.
 
 ## Centrifugation 
 ### Mesh
